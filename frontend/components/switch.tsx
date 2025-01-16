@@ -1,12 +1,10 @@
 import React from '../lib/react.js';
 
-const h = React.createElement;
-
 interface SwitchProps {
   active?: boolean;
   disabled?: boolean;
   showOnOffText?: boolean;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   onToggle?: () => void;
 }
 
@@ -20,16 +18,6 @@ function Switch({
   onToggle,
 }: SwitchProps) {
   let switchText: SwitchText = !showOnOffText ? null : active ? 'ON' : 'OFF';
-
-  let switchTextNode = null;
-
-  if (switchText) {
-    switchTextNode = h(
-      'span',
-      { className: 'Switch--text', 'aria-hidden': true },
-      switchText
-    );
-  }
 
   const handleToggle = () => {
     if (disabled) return;
@@ -45,24 +33,26 @@ function Switch({
     }
   };
 
-  return h(
-    'div',
-    {
-      role: 'switch',
-      'aria-checked': active,
-      'aria-disabled': disabled,
-      tabIndex: 0,
-      className: 'Switch',
-      onClick: handleToggle,
-      onKeyDown: handleKeyControl,
-    },
-    h('span', { className: 'Switch--label' }, children),
-    h(
-      'span',
-      { className: 'Switch--info' },
-      h('span', { className: 'Switch--knob' }),
-      switchTextNode
-    )
+  return (
+    <div
+      role="switch"
+      className="Switch"
+      tabIndex={0}
+      aria-checked={active}
+      aria-disabled={disabled}
+      onClick={handleToggle}
+      onKeyDown={handleKeyControl}
+    >
+      <span className="Switch--label">{children}</span>
+      <span className="Switch--info">
+        <span className="Switch--knob" />
+        {switchText && (
+          <span className="Switch--text" aria-hidden={true}>
+            {switchText}
+          </span>
+        )}
+      </span>
+    </div>
   );
 }
 

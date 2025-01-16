@@ -7,7 +7,7 @@ interface SwitchProps {
   disabled?: boolean;
   showOnOffText?: boolean;
   children: React.ReactNode;
-  onToggle?: () => void;
+  onToggle?: () => void; // (() => void) | undefined
 }
 
 type SwitchText = 'ON' | 'OFF' | null;
@@ -31,18 +31,13 @@ function Switch({
     );
   }
 
-  const handleToggle = () => {
-    if (disabled) return;
+  const handleClick = () => {
+    // if (onToggle && typeof onToggle === 'function') {
+    //   onToggle();
+    // }
+
+    // 옵셔널 체이닝을 사용한 함수 실행 여부 조건 처리
     onToggle?.();
-  };
-
-  const handleKeyControl = (e: any) => {
-    const key = e.code;
-    const shiftKey = !!e.shiftKey;
-
-    if (!disabled && !shiftKey && (key === 'Space' || key === 'Enter')) {
-      onToggle?.();
-    }
   };
 
   return h(
@@ -53,8 +48,8 @@ function Switch({
       'aria-disabled': disabled,
       tabIndex: 0,
       className: 'Switch',
-      onClick: handleToggle,
-      onKeyDown: handleKeyControl,
+      // onClick: onToggle,
+      onClick: handleClick,
     },
     h('span', { className: 'Switch--label' }, children),
     h(
